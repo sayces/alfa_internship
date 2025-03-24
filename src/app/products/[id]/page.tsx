@@ -5,17 +5,26 @@ import { useStore } from '@/store';
 
 
 
-export default function Item({ params }: { params: { id: string } }) {
-  
+export default function Item({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params); // Распаковка params
+
   const prods = useStore((state: any) => state.prods);
   const favorites = useStore((state: any) => state.favorites);
   const setFavorites = useStore((state: any) => state.setFavorites);
 
-  // Находим товар по id
-  const product = prods.find((p: any) => p.id === Number(params.id));
-
-  // Состояние для лайка
+  const [product, setProduct] = useState<any>(null);
   const [like, setLike] = useState(false);
+
+  // Находим товар по id и проверяем избранное
+  useEffect(() => {
+    const foundProduct = prods.find((p: any) => p.id === Number(id));
+    setProduct(foundProduct);
+
+    if (foundProduct) {
+      setLike(favorites.some((fav: any) => fav.id === foundProduct.id));
+    }
+  }, [id, prods, favorites]);
+  
 
   // Проверяем, есть ли товар в избранных
   useEffect(() => {
@@ -39,7 +48,7 @@ export default function Item({ params }: { params: { id: string } }) {
   if (!product) return <p>Товар не найден...</p>;
   return (
     <div className={styles.item_container}>
-      <p>product id: {params.id}</p>
+      <p>product id: {id}</p>
       <img className={styles.item_image} src={product.image} alt="image" />
       <p>product name: {product.title}</p>
       <p>product price: {product.price}</p>

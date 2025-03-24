@@ -1,10 +1,9 @@
-'use client'
-import React, { useState } from 'react'
-import styles from "./page.module.css"
-import { useStore } from '../../store';
+"use client";
+import React, { useState } from "react";
+import styles from "./page.module.css";
+import { useStore } from "../../store";
 
 export default function CreateProduct() {
-
   const prods = useStore((state: any) => state.prods);
   const setProds = useStore((state: any) => state.setProds);
 
@@ -23,7 +22,7 @@ export default function CreateProduct() {
       [name]: value,
     }));
   };
-  
+
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -42,11 +41,13 @@ export default function CreateProduct() {
     }
 
     try {
+      const newId =
+        prods.length > 0 ? Math.max(...prods.map((p: any) => p.id)) + 1 : 1;
 
       setProds([
         ...prods,
         {
-          id: prods.length + 1,
+          id: newId,
           title: formData.title,
           description: formData.description,
           price: formData.price,
@@ -56,7 +57,6 @@ export default function CreateProduct() {
       ]);
 
       alert("Товар успешно создан!");
-      
 
       // Сбрасываем форму
       setFormData({ title: "", description: "", price: 0, category: "" });
@@ -65,7 +65,6 @@ export default function CreateProduct() {
       alert("Произошла ошибка при создании товара.");
     }
   };
-
 
   return (
     <form className={styles.form} onSubmit={handleOnSubmit}>
@@ -113,7 +112,6 @@ export default function CreateProduct() {
       <label className={styles.form_label}>
         Category
         <select
-          
           name="category"
           value={formData.category}
           onChange={handleSelectChange}
@@ -125,12 +123,12 @@ export default function CreateProduct() {
           <option value="jewelery">Jewelery</option>
           <option value="men's clothing">Men's Clothing</option>
           <option value="women's clothing">Women's Clothing</option>
-        </select >
+        </select>
       </label>
 
       <button type="submit" className={styles.form_button}>
         Submit
       </button>
     </form>
-  )
+  );
 }
