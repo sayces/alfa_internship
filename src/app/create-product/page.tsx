@@ -73,6 +73,8 @@ export default function CreateProduct() {
       <label className={styles.form_label}>
         Product Title
         <input
+          minLength={4}
+          maxLength={30}
           type="text"
           name="title"
           value={formData.title}
@@ -86,6 +88,8 @@ export default function CreateProduct() {
       <label className={styles.form_label}>
         Description
         <input
+          minLength={10}
+          maxLength={254}
           type="text"
           name="description"
           value={formData.description}
@@ -99,6 +103,8 @@ export default function CreateProduct() {
       <label className={styles.form_label}>
         Price
         <input
+          min={1}
+          max={100000}
           type="number"
           name="price"
           value={formData.price}
